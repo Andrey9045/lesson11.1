@@ -5,56 +5,61 @@ from urllib.parse import urlparse
 from dotenv import load_dotenv
 
 
-def shorten_link(token, url):
-    response = requests.post(url, params=token)
+def shorten_link(parameters):
+    shorten_link_url = 'https://api.vk.ru/method/utils.getShortLink'
+    response = requests.post(shorten_link_url, params=parameters)
     response.raise_for_status()
-    adress = response.json()
-    try:
-        short_link = adress['response']['short_url']
-    except requests.exceptions.HTTPError:
-        short_link = 'Ошибка'
+    response_dict = response.json()
+    short_link = response_dict['response']['short_url']
     return short_link
 
 
-def count_clicks(token_click, url_click):
-    response = requests.post(url_click, params=token_click)
+def count_clicks(click_parameters):
+    count_clicks_url = 'https://api.vk.ru/method/utils.getLinkStats'
+    response = requests.post(count_clicks_url, params=click_parameters)
     response.raise_for_status()
-    adress = response.json()
-    try:
-        stats = adress['response']['stats']
-        line = stats[0]
-        views = line['views']
-    except requests.exceptions.HTTPError:
-        views = 'Ошибка'
+    response_json = response.json()
+    stats = response_json['response']['stats']
+    line = stats[0]
+    views = line['views']
     return views
 
 
-def is_shorten_link(link):
-    parse = urlparse(link)
-    if parse.netloc == 'vk.cc':
-        print('Количество переходов', count_clicks(token_click, url_click))
-    else:
-        print('Сокращенная ссылка', shorten_link(token, url))
+def is_shorten_link(click_parameters):
+    count_clicks_url = 'https://api.vk.ru/method/utils.getLinkStats'
+    response = requests.post(count_clicks_url, params=click_parameters)
+    response.raise_for_status()
+    response_json = response.json()
+    response_json_list=list(response_json.keys())
+    response_json_str=response_json_list[0]
+    if response_json_str=='error':
+        return False
+    else:   
+        return True
 
 
 if __name__ == '__main__':
-    link = input('Введите ссылку:')
+    url = input('Введите ссылку:')
     load_dotenv()
-    token = {
-        'access_token': os.getenv("TOKEN"),
-        'url': link,
+    parameters = {
+        'access_token': os.getenv("TOKEN"), 
+        'url': url,
         'v': '5.199',
     }
-    url = 'https://api.vk.ru/method/utils.getShortLink'
-    url_click = 'https://api.vk.ru/method/utils.getLinkStats'
-    link_parse = urlparse(link)
+    link_parse = urlparse(url)
     short_path = link_parse.path.strip('/').split('/')
-
-    token_click = {
+    click_parameters = {
         'access_token': os.getenv("TOKEN"),
         'key': short_path,
         'interval': 'forever',
         'intervals_count': '1',
         'v': '5.199',
     }
-    is_shorten_link(link)
+    try:
+        if is_shorten_link(click_parameters)==True:
+            print('Количество переходов:', count_clicks(click_parameters))
+        else:
+            print('Короткая ссылка:', shorten_link(parameters)) 
+   
+    except requests.exceptions.HTTPError:
+        print('Ошибка')
