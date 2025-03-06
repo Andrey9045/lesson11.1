@@ -14,8 +14,8 @@ def shorten_link(url, token):
     shorten_link_url = 'https://api.vk.ru/method/utils.getShortLink'
     response = requests.post(shorten_link_url, params=parameters)
     response.raise_for_status()
-    response_dict = response.json()
-    short_link = response_dict['response']['short_url']
+    response_answer = response.json()
+    short_link = response_answer['response']['short_url']
     return short_link
 
 
@@ -32,8 +32,8 @@ def count_clicks(url, token):
     count_clicks_url = 'https://api.vk.ru/method/utils.getLinkStats'
     response = requests.post(count_clicks_url, params=click_parameters)
     response.raise_for_status()
-    response_dict = response.json()
-    stats = response_dict['response']['stats']
+    response_answer = response.json()
+    stats = response_answer['response']['stats']
     line = stats[0]
     views = line['views']
     return views
@@ -52,10 +52,10 @@ def is_shorten_link(url, token):
     count_clicks_url = 'https://api.vk.ru/method/utils.getLinkStats'
     response = requests.post(count_clicks_url, params=click_parameters)
     response.raise_for_status()
-    response_dict = response.json()
-    response_list=list(response_dict.keys())[0]
-    result=response_list=='error'
-    return result
+    response_answer = response.json()
+    response_list='error' in response_answer#list(response_answer.keys())[0]
+ #   result=response_list=='error'
+    return response_list#result
 
 
 if __name__ == '__main__':
