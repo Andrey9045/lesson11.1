@@ -1,6 +1,7 @@
 import os
 
 import requests
+import argparse
 from urllib.parse import urlparse
 from dotenv import load_dotenv
 
@@ -57,7 +58,11 @@ def is_shorten_link(url, token):
    
 
 if __name__ == '__main__':
-    url = input('Введите ссылку:')
+    #url = input('Введите ссылку:')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("name")
+    args = parser.parse_args()
+    url = args.name
     load_dotenv()
     token=os.environ['TOKEN_VK']
     try:
