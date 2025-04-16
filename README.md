@@ -37,6 +37,12 @@ python mein.py https://yandex.ru/
 Если выявится 'error', значит ссылка не сокрашенная, если ошибка есть, ссылка сокращенная.
 
 Если ссылка не сокращенная, то запускается функция shorten_link(url, token). Которая делает запрос API https://api.vk.ru/method/utils.getShortLink c заданными параметрами. Ресурс сократит ссылку, резкльтат выведется в консоль.
+
 ![фото](https://raw.githubusercontent.com/Andrey9045/photo/refs/heads/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202025-04-16%20212139.png)
+
 Если ссылка сокращенная, то запустится функция count_clicks(url, token), которая работает аналогично функции, которая проверяет ссылку на сокращенность. Сервис посчитает кол-во переходов по ссылке, и выведет в терминал.
+
 ![фото](https://raw.githubusercontent.com/Andrey9045/photo/refs/heads/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202025-04-16%20212149.png)
+
+
+
